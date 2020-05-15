@@ -1,0 +1,57 @@
+1、用枚举类型的时候
+		转json转失败
+		
+2、服务超时时间不管用：
+	不能只设置一个，所有调用的服务都得设置
+	feign.client.config.ucs-intelligence-service.connect-timeout=5000
+	feign.client.config.ucs-intelligence-service.read-timeout=120000
+	feign.client.config.ucs-management-service.connect-timeout=5000
+	feign.client.config.ucs-management-service.read-timeout=120000
+	feign.client.config.ucs-online-service.connect-timeout=5000
+	feign.client.config.ucs-online-service.read-timeout=120000
+	
+3、build的时候，excel文件再tartget目录下生成的乱码
+	原因：maven打包时，会编译特定文件导致文件不可用：
+	解决办法：过滤不编译文件类型
+	https://www.cnblogs.com/dashazia/p/11492159.html
+	<plugin>
+            <plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-resources-plugin</artifactId>
+                <configuration>
+                    <encoding>utf-8</encoding>
+                    <useDefaultDelimiters>true</useDefaultDelimiters>
+                    <nonFilteredFileExtensions>
+                        <nonFilteredFileExtension>xls</nonFilteredFileExtension>
+                        <nonFilteredFileExtension>xlsx</nonFilteredFileExtension>
+                    </nonFilteredFileExtensions>
+                </configuration>
+            </plugin>
+			
+			
+4、redis set的时候是在python  set的，但是需要在java代码里面获取
+	在java里通过exsit方法判断key是存在的，但是get(key)的时候获取为空
+	
+	原因：python的key是字符串类型的(设置了编码格式)，但是java调用get(key)的时候，会先把字符串的key转化为二进制，这样就跟python中set的key不一致了，所以会得到null的结果
+	
+	处理方式：if (!RedisUtils.exists("com.ubtrobot.icsp.15.trainresult")) {
+                return;
+            }
+            String trainResultObj = new String(RedisUtils.get(("com.ubtrobot.icsp.15.trainresult").getBytes()));
+			即可获取到 trainResultObj
+
+			
+	com.ubtrobot.icsp.15.trainresult.trainstarttime
+	com.ubtrobot.icsp.15.trainresult
+	com.ubtrobot.icsp.15.trainresult.traincompletetime
+	com.ubtrobot.icsp.15.trainresult.times
+	
+
+5、idea的使用问题：
+	当创建的文件夹名称为xxl-job时，不能再该文件夹下新建java class文件，因为xxl-job不符合java的文件夹命名规范
+	
+	
+6、
+	
+
+

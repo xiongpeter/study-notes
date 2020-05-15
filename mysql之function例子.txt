@@ -1,0 +1,27 @@
+
+drop FUNCTION if EXISTS getUcsBusinessCategory;
+create FUNCTION getUcsBusinessCategory(rootId BIGINT)
+		RETURNS VARCHAR(1000)
+		DETERMINISTIC
+		BEGIN
+				DECLARE sTemp VARCHAR(1000);
+				DECLARE sTempChd VARCHAR(1000);
+				
+				select id INTO sTemp FROM ucs_business_category where id = rootId;
+				IF sTemp IS NOT NULL or sTemp != '' THEN
+						SET sTempChd =cast(rootId as CHAR);
+        ELSE
+						set sTemp = null;
+        END IF;
+				IF sTemp is not null THEN
+					SET sTemp = '$'; 
+					WHILE sTempChd is not null DO 
+							SET sTemp = concat(sTemp,',',sTempChd); 
+							SELECT group_concat(id) INTO sTempChd FROM ucs_business_category where FIND_IN_SET(pid, sTempChd) > 0;
+					END WHILE;
+				END IF;
+				RETURN sTemp;
+		END;
+
+
+-- select getUcsProductCategory(3);
