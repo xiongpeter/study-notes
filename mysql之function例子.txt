@@ -10,9 +10,9 @@ create FUNCTION getUcsBusinessCategory(rootId BIGINT)
 				select id INTO sTemp FROM ucs_business_category where id = rootId;
 				IF sTemp IS NOT NULL or sTemp != '' THEN
 						SET sTempChd =cast(rootId as CHAR);
-        ELSE
+				ELSE
 						set sTemp = null;
-        END IF;
+				END IF;
 				IF sTemp is not null THEN
 					SET sTemp = '$'; 
 					WHILE sTempChd is not null DO 

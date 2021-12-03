@@ -9,12 +9,33 @@
 	索引
 	btree索引
 	hash索引
-	存储过程
+	function、存储过程
 	
 	事务、ACID(原子性、一致性、隔离性、永久性)
 	锁(共享锁\读锁、排他锁\写锁、行锁、表锁、意向锁、间隙锁、next-key锁,死锁，)
 	事务隔离级别
 	多版本并发控制MVCC
 	
+3、java集合
 	
 	
+	
+	
+
+
+Query接口有一个实现类：LinkList
+Map接口有三个实现类：HashMap，HashTable，LinkeHashMap
+  HashMap非线程安全，高效，支持null；HashTable线程安全，低效，不支持null
+SortedMap有一个实现类：TreeMap
+
+队列：
+https://blog.csdn.net/GoodLinGL/article/details/115267413?spm=1001.2101.3001.6650.1&utm_medium=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1.no_search_link&depth_1-utm_source=distribute.pc_relevant.none-task-blog-2%7Edefault%7ECTRLIST%7Edefault-1.no_search_link
+https://blog.csdn.net/baichoufei90/article/details/84405459
+https://www.cnblogs.com/lemon-flm/p/7877898.html
+https://www.runoob.com/java/data-queue.html
+
+
+map
+https://blog.csdn.net/qq_28666193/article/details/85263008
+https://www.cnblogs.com/zouhong/p/13566576.html
+https://blog.csdn.net/weixin_39948277/article/details/110617490
