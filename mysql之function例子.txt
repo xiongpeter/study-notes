@@ -1,4 +1,5 @@
 
+#向上递归
 drop FUNCTION if EXISTS getUcsBusinessCategory;
 create FUNCTION getUcsBusinessCategory(rootId BIGINT)
 		RETURNS VARCHAR(1000)
@@ -10,9 +11,9 @@ create FUNCTION getUcsBusinessCategory(rootId BIGINT)
 				select id INTO sTemp FROM ucs_business_category where id = rootId;
 				IF sTemp IS NOT NULL or sTemp != '' THEN
 						SET sTempChd =cast(rootId as CHAR);
-				ELSE
+        ELSE
 						set sTemp = null;
-				END IF;
+        END IF;
 				IF sTemp is not null THEN
 					SET sTemp = '$'; 
 					WHILE sTempChd is not null DO 
@@ -25,3 +26,27 @@ create FUNCTION getUcsBusinessCategory(rootId BIGINT)
 
 
 -- select getUcsProductCategory(3);
+
+
+#向下递归
+drop FUNCTION if EXISTS getParentBlocksByBlock;
+create FUNCTION getParentBlocksByBlock(blockId BIGINT)
+		RETURNS VARCHAR(32)
+		DETERMINISTIC
+		BEGIN
+				DECLARE sTemp VARCHAR(32);
+				DECLARE sTempChd VARCHAR(32);
+				
+				SET sTemp = '$'; 
+				SET sTempChd = cast(blockId as CHAR);
+				SET sTemp = concat(sTemp, ',', sTempChd); 
+				
+				select parent_block_id INTO sTempChd FROM block where id = sTempChd;
+				
+				WHILE sTempChd is not null and sTempChd != '' and sTempChd != '-1' DO 
+						SET sTemp = concat(sTemp,',',sTempChd); 
+						select parent_block_id INTO sTempChd FROM block where id = sTempChd;
+				END WHILE;
+				RETURN sTemp;
+		END;
+SELECT * from t_areainfo where FIND_IN_SET(id,queryChildrenAreaInfo1(7));
