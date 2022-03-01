@@ -1,0 +1,7 @@
+
+1.使用jython-2.7.0jar包，
+
+
+2、使用Runtime.getRuntime()执行脚本文件
+
+
