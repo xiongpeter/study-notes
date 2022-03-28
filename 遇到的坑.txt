@@ -51,7 +51,31 @@
 	当创建的文件夹名称为xxl-job时，不能再该文件夹下新建java class文件，因为xxl-job不符合java的文件夹命名规范
 	
 	
-6、
+6、异步保存前端上传的文件偶现报错
+	当我们接口参数为MultipartFile接受参数时，然后需要异步操作这个文件时，可能会涉及到文件的逻辑，此时就可能会出现如下错误
+	.FileNotFoundException: C:\Users\ubt\AppData\Local\Temp\tomcat.3334126460636316452.40020\work\Tomcat\localhost\upload_4eed9e25_ff24_4b36_ae44_0db6f277256f_00000002.tmp (系统找不到指定的文件。)
+	原因：
+		当我们在子线程中执行保存逻辑是，如果主线程已经结束了，那么他会删除这个临时文件，所以就会报上述错误
+	解决方式：
+		可以使用Countdownlatch等待保存完成后，再让主线程退出，也可以使用其他的同步技术
 	
+7、jdk11下使用sun.awt.*包问题解决
+	图形验证码功能需要使用sun.awt.*包的画图功能， docker容器中安装的jdk是11。 服务启动后报Handler dispatch failed; nested exception is java.lang.NoClassDefFoundError: Could not initialize class sun.awt.X11FontManager错误。
+	原因：
+		jdk11中由于安全原因，在安装时去除了该功能。 在安装jdk8后会把信息的库包安装到系统中。
+	解决方式：
+		方式1：在docker容器中安装jdk8，在pom.xml中使用jdk1.8
+		方式2：按照以下方式修改dockerfile内容
+			FROM harbor-research.ubtrobot.com/base-library/ubtech-java:11
+			#FROM harbor-research.ubtrobot.com/base-library/ubtech-java:8
+			MAINTAINER taolong.hong taolong.hong@ubtrobot.com
+			#docker镜像太简洁了，生成校验码需要使用到------------------------------重点是这里
+			RUN yum install dejavu-sans-fonts fontconfig -y
+			ADD vp-bodyposture-api-0.1-SNAPSHOT.jar app.jar
+			#入口的命令，不用管，可以被覆盖，直接用ENTRYPOINT
+			CMD ["java", "-version"]
+			ENTRYPOINT ["java", "-jar","-Xms512m","-Xmx2g","-XX"]
 
-
+Docker常用命令
+	1、通过进程id查找容器
+		docker ps -q | xargs docker inspect --format '{{.State.Pid}}, {{.Name}}' | grep ${pid}
