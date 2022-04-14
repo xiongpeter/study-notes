@@ -76,6 +76,22 @@
 			CMD ["java", "-version"]
 			ENTRYPOINT ["java", "-jar","-Xms512m","-Xmx2g","-XX"]
 
-Docker常用命令
+8、Docker常用命令
 	1、通过进程id查找容器
 		docker ps -q | xargs docker inspect --format '{{.State.Pid}}, {{.Name}}' | grep ${pid}
+		
+
+9、前端使用form-data提交post表单请求，后台request.getParameter方法获取参数为空
+	后台获取contentType：multipart/form-data;
+	原因：请求参数全被被放到stream中了，没有放在request的parameterMap中
+	解决办法：
+		在获取参数之前加入以下代码：
+		String contentType = request.getContentType();
+		if (contentType != null && contentType.contains("multipart/form-data")) {
+			MultipartResolver resolver = new CommonsMultipartResolver(request.getSession().getServletContext());
+			MultipartHttpServletRequest multipartRequest = resolver.resolveMultipart(request);
+			// 将转化后的 request 放入过滤链中
+			request = multipartRequest;
+		}
+		String companyId = request.getParameter("companyId");
+		String accountName = request.getParameter("accountName");
