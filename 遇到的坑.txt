@@ -82,9 +82,12 @@
 		
 
 9、前端使用form-data提交post表单请求，后台request.getParameter方法获取参数为空
+	项目框架:springboot+springcloud+dubbo+zk
 	后台获取contentType：multipart/form-data;
-	原因：请求参数全被被放到stream中了，没有放在request的parameterMap中
-	解决办法：
+	原因：在配置文件中设置了spring.servlet.multipart.enabled=false, 导致请求参数全被被放到stream中了，没有放在request的parameterMap中
+	解决办法1：
+		在配置文件中设置了spring.servlet.multipart.enabled=true,获取去掉改配置，默认为true
+	解决办法2：
 		在获取参数之前加入以下代码：
 		String contentType = request.getContentType();
 		if (contentType != null && contentType.contains("multipart/form-data")) {
