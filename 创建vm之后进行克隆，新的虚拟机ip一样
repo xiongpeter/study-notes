@@ -1,0 +1,8 @@
+在VMware下将centos7克隆出另一个虚拟机。克隆后出现ip地址与原来那个虚拟机的ip地址相同，主机名也相同，
+在此之后需要进行 一些修改。
+
+1、修改ip地址：
+vi /etc/sysconfig/network-scripts/ifcfg-ens32不同电脑中ifcfg-ens32文件名称不同，可通过上一级目录查看）,
+修改HWADDR这一行，然后保存退出
+2、重启网络：
+service network restart
